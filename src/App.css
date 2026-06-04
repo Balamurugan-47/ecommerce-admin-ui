@@ -1,0 +1,104 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:"Segoe UI", sans-serif;
+  background:#f3f4f6;
+}
+
+/* PAGE */
+
+.login-page{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:50px;
+  padding:20px;
+  background:linear-gradient(
+    135deg,
+    #eef2ff,
+    #f8fafc
+  );
+}
+
+/* LEFT SIDE */
+
+.login-left{
+  width:320px;
+}
+
+.brand-box{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:15px;
+}
+
+.brand-icon{
+  font-size:45px !important;
+  color:#1976d2;
+}
+
+.brand-title{
+  font-size:42px !important;
+  font-weight:700 !important;
+  color:#1976d2;
+}
+
+.login-subtitle{
+  font-size:18px !important;
+  line-height:1.5 !important;
+  color:#4b5563;
+}
+
+/* LOGIN CARD */
+
+.login-card{
+  width:320px;
+  padding:24px !important;
+  border-radius:18px !important;
+  background:white !important;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.08) !important;
+}
+
+/* BUTTONS */
+
+.login-btn{
+  margin-top:24px !important;
+  height:42px;
+  border-radius:10px !important;
+  font-weight:bold !important;
+  text-transform:none !important;
+  font-size:15px !important;
+}
+
+.google-btn{
+  height:42px;
+  border-radius:10px !important;
+  text-transform:none !important;
+  font-weight:bold !important;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+  .login-page{
+    flex-direction:column;
+    text-align:center;
+  }
+
+  .brand-box{
+    justify-content:center;
+  }
+
+  .login-left{
+    width:100%;
+  }
+}

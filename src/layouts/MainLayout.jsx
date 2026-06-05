@@ -7,42 +7,30 @@ import Sidebar from "../components/Sidebar";
 import { useState } from "react";
 
 function MainLayout() {
-
-  const [sidebarOpen, setSidebarOpen] =
-    useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
   return (
-
     <Box sx={{ display: "flex" }}>
+      <Header toggleSidebar={toggleSidebar} />
 
-      <Header
-        toggleSidebar={toggleSidebar}
-      />
+      <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} />
 
-      <Sidebar
-        open={sidebarOpen}
-        toggleSidebar={toggleSidebar}
-      />
-
-      
-    <Box
-      component="main"
-      sx={{
-        flexGrow: 1,
-        p: 3,
-      }}
-    >
-
+      <Box
+         component="main"
+  sx={{
+    flexGrow: 1,
+    p: 0,
+    transition: "all 0.3s ease",
+  }}
+      >
         <Toolbar />
 
         <Outlet />
-
       </Box>
-
     </Box>
   );
 }

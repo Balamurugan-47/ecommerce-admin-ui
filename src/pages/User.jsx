@@ -111,7 +111,7 @@ function User() {
 
   return (
 
-    <Paper sx={{ p: 2 }}>
+    <Paper sx={{ p: 0 }}>
 
       <Typography
         variant="h5"

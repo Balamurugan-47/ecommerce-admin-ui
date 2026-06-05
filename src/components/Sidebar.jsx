@@ -49,19 +49,20 @@ const menus = user?.menus || [];
 
   return (
 
-   <Drawer
+ <Drawer
   variant="persistent"
+  anchor="left"
   open={open}
   sx={{
-    width: 260,
+    width: open ? 260 : 0,
     flexShrink: 0,
 
     "& .MuiDrawer-paper": {
       width: 260,
       boxSizing: "border-box",
-
       backgroundColor: "#E3F2FD",
       borderRight: "1px solid #BBDEFB",
+      position: "fixed",
     },
   }}
 >

@@ -9,7 +9,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-
+import { TextField, Grid, FormControlLabel, Switch, Chip } from "@mui/material";
 import {
   getAllUsers,
   createUser,
@@ -23,14 +23,14 @@ function User() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [mode, setMode] = useState("create");
   const initialForm = {
-    tenantId: "",
     username: "",
     email: "",
     password: "",
     firstName: "",
     lastName: "",
     phone: "",
-    timezone: "",
+    timezone: "Asia/Kolkata",
+    isActive: true,
   };
   const [form, setForm] = useState(initialForm);
   useEffect(() => {
@@ -51,7 +51,7 @@ function User() {
         lastName: user.lastName,
         phone: user.phone,
         timezone: user.timezone,
-        active: user.isActive ? "Yes" : "No",
+        isActive: user.isActive,
         createdAt: user.createdAt,
       }));
       setUsers(formattedRows);
@@ -68,14 +68,14 @@ function User() {
     setMode("edit");
     setSelectedUser(row);
     setForm({
-      tenantId: row.tenantId || "",
       username: row.username || "",
       email: row.email || "",
       password: "",
       firstName: row.firstName || "",
       lastName: row.lastName || "",
       phone: row.phone || "",
-      timezone: row.timezone || "",
+      timezone: row.timezone || "Asia/Kolkata",
+      isActive: row.isActive,
     });
     setOpenForm(true);
   };
@@ -86,23 +86,62 @@ function User() {
     }
   };
   const saveUser = async () => {
-    let result;
-    if (mode === "create") {
-      result = await createUser(form);
-    } else {
-      result = await updateUser(selectedUser.id, form);
+    if (
+      !form.username ||
+      !form.email ||
+      !form.firstName ||
+      !form.lastName ||
+      !form.phone ||
+      !form.timezone
+    ) {
+      alert("Please fill all required fields");
+      return;
     }
+
+    const tenant = JSON.parse(localStorage.getItem("tenant"));
+
+    const payload = {
+      ...form,
+      tenantId: tenant?.tenantId,
+      isActive: form.isActive,
+    };
+
+    if (mode === "edit" && !payload.password) {
+      delete payload.password;
+    }
+
+    let result;
+
+    if (mode === "create") {
+      result = await createUser(payload);
+    } else {
+      result = await updateUser(selectedUser.id, payload);
+    }
+
     if (result.success) {
       setOpenForm(false);
       loadUsers();
     }
   };
   const columns = [
-    { field: "userId", headerName: "User ID", width: 120 },
     { field: "username", headerName: "Username", width: 180 },
     { field: "email", headerName: "Email", width: 250 },
+    { field: "firstName", headerName: "First Name", width: 120 },
+    { field: "lastName", headerName: "Last Name", width: 120 },
     { field: "tenant", headerName: "Tenant", width: 150 },
-    { field: "active", headerName: "Active", width: 120 },
+    {
+      field: "isActive",
+      headerName: "Status",
+      width: 140,
+      renderCell: (params) => (
+        <Chip
+          label={params.value ? "Active" : "Inactive"}
+          color={params.value ? "success" : "error"}
+          size="small"
+          sx={{ fontWeight: 600 }}
+        />
+      ),
+    },
     { field: "createdAt", headerName: "Created Date", width: 220 },
     {
       field: "actions",
@@ -185,7 +224,7 @@ function User() {
         onSubmit={saveUser}
       >
         {" "}
-        <UserForm form={form} setForm={setForm} />{" "}
+        <UserForm form={form} setForm={setForm} mode={mode}/>{" "}
       </CommonDialog>{" "}
     </Paper>
   );

@@ -4,7 +4,6 @@ function CommonDataGrid({ rows, columns, loading }) {
   return (
     <div
       style={{
-        height: 800,
         width: "100%",
       }}
     >
@@ -16,9 +15,11 @@ function CommonDataGrid({ rows, columns, loading }) {
         pageSizeOptions={[10, 25, 50, 100]}
         checkboxSelection
         disableRowSelectionOnClick
-        density="compact"
-        autoHeight
+        density="standard"
         showToolbar
+        // density="compact"
+        rowHeight={40}
+        columnHeaderHeight={44}
       />
     </div>
   );

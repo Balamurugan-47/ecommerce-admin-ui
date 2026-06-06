@@ -20,12 +20,14 @@ function MainLayout() {
       <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} />
 
       <Box
-         component="main"
-  sx={{
-    flexGrow: 1,
-    p: 0,
-    transition: "all 0.3s ease",
-  }}
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 2, // add padding here
+          transition: "all 0.3s ease",
+          overflow: "hidden", // prevents unnecessary scrollbar
+          minWidth: 0, // important for DataGrid flex layouts
+        }}
       >
         <Toolbar />
 

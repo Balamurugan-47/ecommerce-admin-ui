@@ -9,35 +9,24 @@ import {
   Toolbar,
 } from "@mui/material";
 
-import {
-  ExpandLess,
-  ExpandMore,
-} from "@mui/icons-material";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
 import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext";
 
-function Sidebar(
-  {open,
-  toggleSidebar}
-) {
-
+function Sidebar({ open, toggleSidebar }) {
   const navigate = useNavigate();
 
-  const [openMenu, setOpenMenu] =
-    useState(null);
+  const [openMenu, setOpenMenu] = useState(null);
 
-const { user } = useAuth();
+  const { user } = useAuth();
 
-const menus = user?.menus || [];
+  const menus = user?.menus || [];
 
   const modules = menus
     .filter((m) => m.parentMenuId === null)
-    .sort(
-      (a, b) =>
-        a.displayOrder - b.displayOrder
-    );
+    .sort((a, b) => a.displayOrder - b.displayOrder);
 
   const routeMap = {
     Dashboard: "/dashboard",
@@ -48,143 +37,93 @@ const menus = user?.menus || [];
   };
 
   return (
+    <Drawer
+      variant="persistent"
+      anchor="left"
+      open={open}
+      sx={{
+        width: open ? 260 : 0,
+        flexShrink: 0,
 
- <Drawer
-  variant="persistent"
-  anchor="left"
-  open={open}
-  sx={{
-    width: open ? 260 : 0,
-    flexShrink: 0,
-
-    "& .MuiDrawer-paper": {
-      width: 260,
-      boxSizing: "border-box",
-      backgroundColor: "#E3F2FD",
-      borderRight: "1px solid #BBDEFB",
-      position: "fixed",
-    },
-  }}
->
-
+        "& .MuiDrawer-paper": {
+          width: 260,
+          boxSizing: "border-box",
+          backgroundColor: "#E3F2FD",
+          borderRight: "1px solid #BBDEFB",
+          position: "fixed",
+        },
+      }}
+    >
       <Toolbar />
 
       <List>
-
         {modules.map((module) => {
-
           const children = menus.filter(
-            (menu) =>
-              menu.parentMenuId ===
-              module.menuId
+            (menu) => menu.parentMenuId === module.menuId,
           );
 
-          const hasChildren =
-            children.length > 0;
+          const hasChildren = children.length > 0;
 
           return (
             <div key={module.menuId}>
+              <ListItemButton
+                sx={{
+                  color: "#0D47A1",
+                  fontWeight: 700,
 
-              <ListItemButton  sx={{
-    color: "#0D47A1",
-    fontWeight: 700,
-
-    "&:hover": {
-      backgroundColor: "#BBDEFB",
-    },
-  }}
+                  "&:hover": {
+                    backgroundColor: "#BBDEFB",
+                  },
+                }}
                 onClick={() => {
-
                   if (!hasChildren) {
-
-                    navigate(
-                      routeMap[
-                        module.menuName
-                      ]
-                    );
+                    navigate(routeMap[module.menuName]);
 
                     return;
                   }
 
                   setOpenMenu(
-                    openMenu === module.menuId
-                      ? null
-                      : module.menuId
+                    openMenu === module.menuId ? null : module.menuId,
                   );
                 }}
               >
-
-                <ListItemText
-                  primary={module.menuName}
-                />
+                <ListItemText primary={module.menuName} />
 
                 {hasChildren &&
-                  (openMenu === module.menuId
-                    ? <ExpandLess />
-                    : <ExpandMore />)}
-
+                  (openMenu === module.menuId ? (
+                    <ExpandLess />
+                  ) : (
+                    <ExpandMore />
+                  ))}
               </ListItemButton>
 
               {hasChildren && (
-
-                <Collapse
-                  in={
-                    openMenu ===
-                    module.menuId
-                  }
-                >
-
+                <Collapse in={openMenu === module.menuId}>
                   <List>
+                    {children.map((child) => (
+                      <ListItemButton
+                        key={child.menuId}
+                        sx={{
+                          pl: 6,
 
-                    {children.map(
-                      (child) => (
+                          color: "#1565C0",
 
-                        <ListItemButton 
-                          key={
-                            child.menuId
-                          }
-                           sx={{
-    pl: 6,
-
-    color: "#1565C0",
-
-    "&:hover": {
-      backgroundColor: "#CFE8FC",
-    },
-  }}
-                          onClick={() =>
-                            navigate(
-                              routeMap[
-                                child
-                                  .menuName
-                              ]
-                            )
-                          }
-                        >
-
-                          <ListItemText
-                            primary={
-                              child.menuName
-                            }
-                          />
-
-                        </ListItemButton>
-
-                      )
-                    )}
-
+                          "&:hover": {
+                            backgroundColor: "#CFE8FC",
+                          },
+                        }}
+                        onClick={() => navigate(routeMap[child.menuName])}
+                      >
+                        <ListItemText primary={child.menuName} />
+                      </ListItemButton>
+                    ))}
                   </List>
-
                 </Collapse>
-
               )}
-
             </div>
           );
         })}
-
       </List>
-
     </Drawer>
   );
 }

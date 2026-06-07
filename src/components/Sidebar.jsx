@@ -33,6 +33,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const drawerWidth = 260;
+const miniDrawerWidth = 70;
 
 function Sidebar({ open, setOpen }) {
   const navigate = useNavigate();
@@ -110,14 +111,14 @@ function Sidebar({ open, setOpen }) {
       ref={drawerRef}
       variant="persistent"
       anchor="left"
-      open={open}
+      open={true}
       sx={{
-        width: open ? drawerWidth : 0,
+        width: open ? drawerWidth : miniDrawerWidth,
 
         flexShrink: 0,
 
         "& .MuiDrawer-paper": {
-          width: open ? drawerWidth : 0,
+          width: open ? drawerWidth : miniDrawerWidth,
 
           boxSizing: "border-box",
 
@@ -139,7 +140,7 @@ function Sidebar({ open, setOpen }) {
     >
       <Toolbar />
 
-      <Box
+      {/* <Box
         sx={{
           display: "flex",
 
@@ -154,10 +155,10 @@ function Sidebar({ open, setOpen }) {
       >
         <Avatar
           sx={{
-            bgcolor: "#2563EB",
+            bgcolor: "#8e8cd8",
             width: 34,
             height: 34,
-            fontSize: "16px",
+            fontSize: "12px",
           }}
         >
           E
@@ -174,7 +175,7 @@ function Sidebar({ open, setOpen }) {
             </Typography>
           </Box>
         )}
-      </Box>
+      </Box> */}
 
       <Divider
         sx={{
@@ -319,7 +320,7 @@ function Sidebar({ open, setOpen }) {
           sx={{
             width: 32,
             height: 32,
-            fontSize: "14px",
+            fontSize: "12px",
           }}
         >
           {user?.username?.[0]}
@@ -327,11 +328,11 @@ function Sidebar({ open, setOpen }) {
 
         {open && (
           <Box>
-            <Typography fontWeight={700} fontSize={14}>
+            <Typography fontWeight={700} fontSize={10}>
               {user?.username}
             </Typography>
 
-            <Typography fontSize={12} color="#94A3B8">
+            <Typography fontSize={10} color="#8e8cd8">
               {user?.roles?.[0]}
             </Typography>
           </Box>

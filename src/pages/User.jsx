@@ -148,14 +148,24 @@ function User() {
       field: "isActive",
       headerName: "Status",
       width: 140,
-      renderCell: (params) => (
-        <Chip
-          label={params.value ? "Active" : "Inactive"}
-          color={params.value ? "success" : "error"}
-          size="small"
-          sx={{ fontWeight: 600 }}
-        />
-      ),
+     renderCell: (params) => (
+  <Chip
+    label={params.value ? "Active" : "Inactive"}
+    size="small"
+    sx={{
+      fontWeight: 600,
+      background: params.value
+        ? "linear-gradient(135deg, #15602b 0%, #6af7a0 100%)"
+        : "linear-gradient(135deg, #7f1d1d 0%, #ef4444 100%)",
+      color: "#fff",
+      boxShadow: params.value
+        ? "0 2px 8px rgba(124,106,247,0.4)"
+        : "0 2px 8px rgba(239,68,68,0.4)",
+    }}
+  />
+),
+
+
     },
     { field: "createdAt", headerName: "Created Date", width: 220 },
     {
@@ -217,21 +227,26 @@ function User() {
         <Box sx={{ ml: "auto" }}>
           <Button
             variant="contained"
+            color="primary"
             startIcon={<AddIcon />}
             onClick={handleCreate}
             sx={{
               borderRadius: 2,
-
               textTransform: "none",
-
               fontWeight: 600,
+              background: "linear-gradient(135deg, #1a1560 0%, #7c6af7 100%)",
+              boxShadow: "0 4px 12px rgba(124,106,247,0.4)",
+              "&:hover": {
+                background: "linear-gradient(135deg, #0f0c29 0%, #5b4fcf 100%)",
+                boxShadow: "0 6px 16px rgba(124,106,247,0.5)",
+              },
             }}
           >
             Create User
           </Button>
         </Box>
       </Box>
-      <CommonDataGrid rows={users} columns={columns} loading={loading}  />{" "}
+      <CommonDataGrid rows={users} columns={columns} loading={loading} />{" "}
       <CommonDialog
         open={openForm}
         title={mode === "create" ? "Create User" : "Edit User"}

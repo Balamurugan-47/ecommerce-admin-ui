@@ -1,32 +1,35 @@
 import { Outlet } from "react-router-dom";
-
 import { Box, Toolbar } from "@mui/material";
+import { useState } from "react";
 
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
-import { useState } from "react";
 
 function MainLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
+    setSidebarOpen((prev) => !prev);
   };
 
   return (
     <Box sx={{ display: "flex" }}>
       <Header toggleSidebar={toggleSidebar} />
 
-      <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} toggleSidebar={toggleSidebar} />
+      <Sidebar
+        open={sidebarOpen}
+        setOpen={setSidebarOpen}
+        toggleSidebar={toggleSidebar}
+      />
 
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          p: 2, // add padding here
-          transition: "all 0.3s ease",
-          overflow: "hidden", // prevents unnecessary scrollbar
-          minWidth: 0, // important for DataGrid flex layouts
+          p: 2,
+          minWidth: 0,
+          overflow: "hidden",
+          transition: "margin-left 0.3s ease",
         }}
       >
         <Toolbar />
@@ -36,4 +39,5 @@ function MainLayout() {
     </Box>
   );
 }
+
 export default MainLayout;

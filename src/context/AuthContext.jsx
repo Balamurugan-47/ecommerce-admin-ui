@@ -24,6 +24,21 @@ export const AuthProvider = ({ children }) => {
       JSON.stringify(userData)
     );
 
+      if (userData.tenant) {
+    localStorage.setItem(
+      "tenant",
+      JSON.stringify(userData.tenant)
+    );
+  }
+
+  // Store tenantId separately
+  if (userData.tenantId) {
+    localStorage.setItem(
+      "tenantId",
+      userData.tenantId
+    );
+  }
+
     setUser(userData);
     setIsAuthenticated(true);
   };

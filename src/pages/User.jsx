@@ -112,6 +112,10 @@ function User() {
 
       const tenant = JSON.parse(localStorage.getItem("tenant"));
 
+
+      console.log("Tenant from localStorage:", tenant);
+      console.log("Tenant ID:", tenant?.tenantId);
+
       const payload = {
         ...form,
         tenantId: tenant?.tenantId,

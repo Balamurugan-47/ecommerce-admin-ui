@@ -17,7 +17,7 @@ function MainLayout() {
     <Box sx={{ display: "flex" }}>
       <Header toggleSidebar={toggleSidebar} />
 
-      <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} />
+      <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} toggleSidebar={toggleSidebar} />
 
       <Box
         component="main"

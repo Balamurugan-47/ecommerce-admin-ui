@@ -17,6 +17,7 @@ function CommonDialog({
   children,
   onClose,
   onSubmit,
+  loading,
 }) {
   return (
     <Dialog
@@ -84,6 +85,7 @@ function CommonDialog({
             textTransform: "none",
             fontWeight: 600,
           }}
+          disabled={loading}
         >
           Save
         </Button>

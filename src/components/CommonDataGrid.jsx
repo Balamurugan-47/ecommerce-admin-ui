@@ -20,6 +20,17 @@ function CommonDataGrid({ rows, columns, loading }) {
         // density="compact"
         rowHeight={40}
         columnHeaderHeight={44}
+        sx={{
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: "#f8f9fa",
+            borderBottom: "1px solid #e0e0e0",
+          },
+          "& .MuiDataGrid-columnHeaderTitle": {
+            fontWeight: 600,
+            color: "#363434", // dark text
+            fontSize: "0.875rem",
+          },
+        }}
       />
     </div>
   );

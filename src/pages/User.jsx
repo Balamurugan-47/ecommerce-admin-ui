@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
-import { Typography, Paper, Breadcrumbs, Box, Button } from "@mui/material";
+import {
+  Typography,
+  Paper,
+  Breadcrumbs,
+  Box,
+  Button,
+  Backdrop,
+  CircularProgress,
+} from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import CommonDataGrid from "../components/CommonDataGrid";
 import CommonDialog from "../components/CommonDialog";
@@ -21,6 +29,7 @@ function User() {
   const [loading, setLoading] = useState(false);
   const [openForm, setOpenForm] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [saving, setSaving] = useState(false);
   const [mode, setMode] = useState("create");
   const initialForm = {
     username: "",
@@ -98,29 +107,35 @@ function User() {
       return;
     }
 
-    const tenant = JSON.parse(localStorage.getItem("tenant"));
+    try {
+      setSaving(true);
 
-    const payload = {
-      ...form,
-      tenantId: tenant?.tenantId,
-      isActive: form.isActive,
-    };
+      const tenant = JSON.parse(localStorage.getItem("tenant"));
 
-    if (mode === "edit" && !payload.password) {
-      delete payload.password;
-    }
+      const payload = {
+        ...form,
+        tenantId: tenant?.tenantId,
+        isActive: form.isActive,
+      };
 
-    let result;
+      if (mode === "edit" && !payload.password) {
+        delete payload.password;
+      }
 
-    if (mode === "create") {
-      result = await createUser(payload);
-    } else {
-      result = await updateUser(selectedUser.id, payload);
-    }
+      let result;
 
-    if (result.success) {
-      setOpenForm(false);
-      loadUsers();
+      if (mode === "create") {
+        result = await createUser(payload);
+      } else {
+        result = await updateUser(selectedUser.id, payload);
+      }
+
+      if (result.success) {
+        setOpenForm(false);
+        loadUsers();
+      }
+    } finally {
+      setSaving(false);
     }
   };
   const columns = [
@@ -216,16 +231,26 @@ function User() {
           </Button>
         </Box>
       </Box>
-      <CommonDataGrid rows={users} columns={columns} loading={loading} />{" "}
+      <CommonDataGrid rows={users} columns={columns} loading={loading}  />{" "}
       <CommonDialog
         open={openForm}
         title={mode === "create" ? "Create User" : "Edit User"}
         onClose={() => setOpenForm(false)}
         onSubmit={saveUser}
+        loading={saving}
       >
         {" "}
-        <UserForm form={form} setForm={setForm} mode={mode}/>{" "}
+        <UserForm form={form} setForm={setForm} mode={mode} />{" "}
       </CommonDialog>{" "}
+      <Backdrop
+        sx={{
+          color: "#fff",
+          zIndex: (theme) => theme.zIndex.drawer + 999,
+        }}
+        open={saving}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Paper>
   );
 }

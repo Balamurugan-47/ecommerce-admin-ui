@@ -31,7 +31,7 @@ function CommonDialog({ open, title, children, onClose, onSubmit, loading }) {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          py: 1,
+          py: 1.5,
           px: 3,
         }}
       >
@@ -53,7 +53,7 @@ function CommonDialog({ open, title, children, onClose, onSubmit, loading }) {
         </IconButton>
       </DialogTitle>
 
-      <DialogContent sx={{ py: 3, mt: 1 }}>{children}</DialogContent>
+      <DialogContent sx={{ py: 3, mt: 5 }}>{children}</DialogContent>
 
       <DialogActions sx={{ borderTop: "1px solid #eee", p: 2, gap: 1 }}>
         <Button

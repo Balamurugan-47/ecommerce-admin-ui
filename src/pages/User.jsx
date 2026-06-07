@@ -110,17 +110,28 @@ function User() {
     try {
       setSaving(true);
 
-      const tenant = JSON.parse(localStorage.getItem("tenant"));
+      const tenantRaw = localStorage.getItem("tenant");
 
+      console.log("tenantRaw:", tenantRaw);
+
+      let tenant = null;
+
+      try {
+        tenant = tenantRaw ? JSON.parse(tenantRaw) : null;
+      } catch (error) {
+        console.error("Error parsing tenant from localStorage:", error);
+      }
 
       console.log("Tenant from localStorage:", tenant);
       console.log("Tenant ID:", tenant?.tenantId);
 
       const payload = {
         ...form,
-        tenantId: tenant?.tenantId,
+        tenantId: tenant?.tenantId ?? null,
         isActive: form.isActive,
       };
+
+      console.log("Final Payload:", payload);
 
       if (mode === "edit" && !payload.password) {
         delete payload.password;
@@ -152,24 +163,22 @@ function User() {
       field: "isActive",
       headerName: "Status",
       width: 140,
-     renderCell: (params) => (
-  <Chip
-    label={params.value ? "Active" : "Inactive"}
-    size="small"
-    sx={{
-      fontWeight: 600,
-      background: params.value
-        ? "linear-gradient(135deg, #15602b 0%, #6af7a0 100%)"
-        : "linear-gradient(135deg, #7f1d1d 0%, #ef4444 100%)",
-      color: "#fff",
-      boxShadow: params.value
-        ? "0 2px 8px rgba(124,106,247,0.4)"
-        : "0 2px 8px rgba(239,68,68,0.4)",
-    }}
-  />
-),
-
-
+      renderCell: (params) => (
+        <Chip
+          label={params.value ? "Active" : "Inactive"}
+          size="small"
+          sx={{
+            fontWeight: 600,
+            background: params.value
+              ? "linear-gradient(135deg, #15602b 0%, #6af7a0 100%)"
+              : "linear-gradient(135deg, #7f1d1d 0%, #ef4444 100%)",
+            color: "#fff",
+            boxShadow: params.value
+              ? "0 2px 8px rgba(124,106,247,0.4)"
+              : "0 2px 8px rgba(239,68,68,0.4)",
+          }}
+        />
+      ),
     },
     { field: "createdAt", headerName: "Created Date", width: 220 },
     {

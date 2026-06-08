@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
       JSON.stringify(userData)
     );
 
-      if (userData.tenant) {
+    if (userData.tenant) {
     localStorage.setItem(
       "tenant",
       JSON.stringify(userData.tenant)

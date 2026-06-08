@@ -11,6 +11,7 @@ import UserRole from "./pages/UserRole";
 import Product from "./pages/Product";
 import Order from "./pages/Order";
 import Tenants from "./pages/Tenants";
+import Menu from "./pages/Menu";
 
 import MainLayout from "./layouts/MainLayout";
 import { AuthProvider, useAuth } from "./context/AuthContext";
@@ -44,6 +45,7 @@ function App() {
           <Route path="/product" element={<Product />} />
           <Route path="/order" element={<Order />} />
           <Route path="/tenant" element={<Tenants />} />
+          <Route path="/menu" element={<Menu />} />
         </Route>
 
       </Routes>

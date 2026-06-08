@@ -86,6 +86,8 @@ function Sidebar({ open, setOpen }) {
     Tenants: "/tenant",
 
     Administration: "/administration",
+
+    Menu: "/menu",
   };
 
   const iconMap = {

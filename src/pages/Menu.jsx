@@ -19,6 +19,7 @@ import CommonDataGrid from "../components/CommonDataGrid";
 import CommonDialog from "../components/CommonDialog";
 import MenuForm from "../components/MenuForm";
 import { getAllMenus, saveMenu, deleteMenu } from "../api/menuApi";
+import "../common.css";
 
 // ─── Shared UI helpers — import these in other pages too ──────────────────────
 
@@ -26,55 +27,33 @@ export const StatusChip = ({ value }) => (
   <Chip
     label={value ? "Active" : "Inactive"}
     size="small"
-    sx={{
-      fontWeight: 600,
-      background: value
-        ? "linear-gradient(135deg, #15602b 0%, #6af7a0 100%)"
-        : "linear-gradient(135deg, #7f1d1d 0%, #ef4444 100%)",
-      color: "#fff",
-      boxShadow: value
-        ? "0 2px 8px rgba(124,106,247,0.4)"
-        : "0 2px 8px rgba(239,68,68,0.4)",
-    }}
+    className={`status-chip ${value ? "status-chip--active" : "status-chip--inactive"}`}
   />
 );
 
 export const SaveBackdrop = ({ open }) => (
-  <Backdrop
-    sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 999 }}
-    open={open}
-  >
+  <Backdrop className="save-backdrop" open={open}>
     <CircularProgress color="inherit" />
   </Backdrop>
 );
 
 export const PageHeader = ({ breadcrumbs = [], title, onCreateLabel, onCreate }) => (
   <>
-    <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} sx={{ mb: 2 }}>
+    <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} className="page-breadcrumbs">
       {breadcrumbs.map((b, i) => (
         <Typography key={i}>{b}</Typography>
       ))}
     </Breadcrumbs>
-    <Box sx={{ display: "flex", alignItems: "center", width: "100%", mb: 2 }}>
+    <Box className="page-header">
       <Typography variant="h5" fontWeight={600}>
         {title}
       </Typography>
-      <Box sx={{ ml: "auto" }}>
+      <Box className="page-header-actions">
         <Button
           variant="contained"
           startIcon={<AddIcon />}
           onClick={onCreate}
-          sx={{
-            borderRadius: 2,
-            textTransform: "none",
-            fontWeight: 600,
-            background: "linear-gradient(135deg, #1a1560 0%, #7c6af7 100%)",
-            boxShadow: "0 4px 12px rgba(124,106,247,0.4)",
-            "&:hover": {
-              background: "linear-gradient(135deg, #0f0c29 0%, #5b4fcf 100%)",
-              boxShadow: "0 6px 16px rgba(124,106,247,0.5)",
-            },
-          }}
+          className="btn-create"
         >
           {onCreateLabel}
         </Button>
@@ -84,7 +63,7 @@ export const PageHeader = ({ breadcrumbs = [], title, onCreateLabel, onCreate })
 );
 
 export const RowActions = ({ onEdit, onDelete }) => (
-  <Box>
+  <Box className="row-actions">
     <Tooltip title="Edit">
       <IconButton color="primary" size="small" onClick={onEdit}>
         <EditIcon fontSize="small" />
@@ -217,8 +196,8 @@ function Menu() {
     { field: "menuCode", headerName: "Menu Code", width: 160 },
     { field: "menuType", headerName: "Type", width: 110 },
     { field: "parentMenuName", headerName: "Parent Menu", width: 160 },
-    { field: "url", headerName: "URL", width: 160 },
-    { field: "icon", headerName: "Icon", width: 120 },
+    // { field: "url", headerName: "URL", width: 160 },
+    // { field: "icon", headerName: "Icon", width: 120 },
     { field: "displayOrder", headerName: "Order", width: 80 },
     {
       field: "isActive",
@@ -241,7 +220,7 @@ function Menu() {
   ];
 
   return (
-    <Paper elevation={0} sx={{ p: 3, borderRadius: 2 }}>
+    <Paper elevation={0} className="page-container">
       <PageHeader
         breadcrumbs={["Administration", "Menus"]}
         title="Menus"

@@ -1,4 +1,5 @@
 import { TextField, Grid, FormControlLabel, Switch } from "@mui/material";
+import "../common.css";
 
 function UserForm({ form, setForm, mode}) {
   const handleChange = (e) => {
@@ -9,7 +10,7 @@ function UserForm({ form, setForm, mode}) {
   };
 
   return (
-    <Grid container spacing={2} sx={{ mt: 1 }}>
+    <Grid container spacing={2} className="form-grid-mt">
       <Grid item xs={12} md={6}>
         <TextField
           fullWidth

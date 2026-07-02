@@ -24,6 +24,8 @@ import {
   updateUser,
   deleteUser,
 } from "../api/userApi";
+import "../common.css";
+
 function User() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -167,16 +169,7 @@ function User() {
         <Chip
           label={params.value ? "Active" : "Inactive"}
           size="small"
-          sx={{
-            fontWeight: 600,
-            background: params.value
-              ? "linear-gradient(135deg, #15602b 0%, #6af7a0 100%)"
-              : "linear-gradient(135deg, #7f1d1d 0%, #ef4444 100%)",
-            color: "#fff",
-            boxShadow: params.value
-              ? "0 2px 8px rgba(124,106,247,0.4)"
-              : "0 2px 8px rgba(239,68,68,0.4)",
-          }}
+          className={`status-chip ${params.value ? "status-chip--active" : "status-chip--inactive"}`}
         />
       ),
     },
@@ -187,7 +180,7 @@ function User() {
       width: 200,
       sortable: false,
       renderCell: (params) => (
-        <Box>
+        <Box className="row-actions">
           <Tooltip title="Edit User">
             <IconButton
               color="primary"
@@ -212,48 +205,28 @@ function User() {
     },
   ];
   return (
-    <Paper elevation={0} sx={{ p: 3, borderRadius: 2 }}>
+    <Paper elevation={0} className="page-container">
       {" "}
       <Breadcrumbs
         separator={<NavigateNextIcon fontSize="small" />}
-        sx={{ mb: 2 }}
+        className="page-breadcrumbs"
       >
         {" "}
         <Typography> Administration </Typography>{" "}
         <Typography> Users </Typography>{" "}
       </Breadcrumbs>{" "}
-      <Box
-        sx={{
-          display: "flex",
-
-          alignItems: "center",
-
-          width: "100%",
-
-          mb: 2,
-        }}
-      >
+      <Box className="page-header">
         <Typography variant="h5" fontWeight={600}>
           Users
         </Typography>
 
-        <Box sx={{ ml: "auto" }}>
+        <Box className="page-header-actions">
           <Button
             variant="contained"
             color="primary"
             startIcon={<AddIcon />}
             onClick={handleCreate}
-            sx={{
-              borderRadius: 2,
-              textTransform: "none",
-              fontWeight: 600,
-              background: "linear-gradient(135deg, #1a1560 0%, #7c6af7 100%)",
-              boxShadow: "0 4px 12px rgba(124,106,247,0.4)",
-              "&:hover": {
-                background: "linear-gradient(135deg, #0f0c29 0%, #5b4fcf 100%)",
-                boxShadow: "0 6px 16px rgba(124,106,247,0.5)",
-              },
-            }}
+            className="btn-create"
           >
             Create User
           </Button>
@@ -270,13 +243,7 @@ function User() {
         {" "}
         <UserForm form={form} setForm={setForm} mode={mode} />{" "}
       </CommonDialog>{" "}
-      <Backdrop
-        sx={{
-          color: "#fff",
-          zIndex: (theme) => theme.zIndex.drawer + 999,
-        }}
-        open={saving}
-      >
+      <Backdrop className="save-backdrop" open={saving}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </Paper>

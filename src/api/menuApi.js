@@ -1,31 +1,21 @@
-import axios from "axios";
-
-const BASE_URL = "https://ecommerce-monolithic-2.onrender.com/api";
-
-const getAuthHeaders = () => {
-  const token = localStorage.getItem("token");
-  return {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-};
+import api from "./axiosClient";
+import { apiSuccess, apiError } from "../utils/apiHelpers";
 
 export const getAllMenus = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/menu/getAll`, getAuthHeaders());
-    return { success: true, data: response.data };
+    const response = await api.get("/menu/getAll");
+    return apiSuccess(response.data);
   } catch (error) {
-    return { success: false, message: error.response?.data?.message || "Failed to fetch menus" };
+    return apiError(error, "Failed to fetch menus");
   }
 };
 
 export const getMenuById = async (id) => {
   try {
-    const response = await axios.get(`${BASE_URL}/menu/${id}`, getAuthHeaders());
-    return { success: true, data: response.data };
+    const response = await api.get(`/menu/${id}`);
+    return apiSuccess(response.data);
   } catch (error) {
-    return { success: false, message: error.response?.data?.message || "Failed to fetch menu" };
+    return apiError(error, "Failed to fetch menu");
   }
 };
 
@@ -34,18 +24,18 @@ export const getMenuById = async (id) => {
 // Update: menuId = existing id
 export const saveMenu = async (menuData) => {
   try {
-    const response = await axios.post(`${BASE_URL}/menu/save`, menuData, getAuthHeaders());
-    return { success: true, data: response.data };
+    const response = await api.post("/menu/save", menuData);
+    return apiSuccess(response.data);
   } catch (error) {
-    return { success: false, message: error.response?.data?.message || "Failed to save menu" };
+    return apiError(error, "Failed to save menu");
   }
 };
 
 export const deleteMenu = async (id) => {
   try {
-    await axios.delete(`${BASE_URL}/menu/${id}`, getAuthHeaders());
+    await api.delete(`/menu/${id}`);
     return { success: true };
   } catch (error) {
-    return { success: false, message: error.response?.data?.message || "Failed to delete menu" };
+    return apiError(error, "Failed to delete menu");
   }
 };

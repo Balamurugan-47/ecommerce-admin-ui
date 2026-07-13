@@ -78,3 +78,39 @@
 .form-grid-mt {
   margin-top: 8px; /* MUI spacing(1) */
 }
+
+/* ---------- Role: "Screens and Permission" section ---------- */
+.permissions-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+ 
+.permissions-header-icon {
+  color: #5b4fcf;
+}
+ 
+.permissions-divider {
+  margin-bottom: 12px;
+}
+ 
+.permissions-table-container {
+  background: #f5f6fb;
+  border-radius: 8px;
+  padding: 8px;
+}
+ 
+.permissions-table-container thead tr {
+  background: #eceefa;
+}
+ 
+.permissions-table-container th {
+  font-weight: 600 !important;
+}
+ 
+.permissions-screen-name {
+  display: flex;
+  align-items: center;
+}

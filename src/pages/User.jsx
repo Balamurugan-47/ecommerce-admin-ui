@@ -24,10 +24,12 @@ import {
   updateUser,
   deleteUser,
 } from "../api/userApi";
+import { getRoleDropdown } from "../api/roleApi";
 import "../common.css";
 
 function User() {
   const [users, setUsers] = useState([]);
+  const [roleOptions, setRoleOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [openForm, setOpenForm] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -41,33 +43,51 @@ function User() {
     lastName: "",
     phone: "",
     timezone: "Asia/Kolkata",
+    roleId: "",
     isActive: true,
   };
   const [form, setForm] = useState(initialForm);
   useEffect(() => {
     loadUsers();
+    loadRoles();
   }, []);
   const loadUsers = async () => {
     setLoading(true);
     const result = await getAllUsers();
     if (result.success) {
-      const formattedRows = result.data.map((user) => ({
-        id: user.userId,
-        userId: user.userId,
-        username: user.username,
-        email: user.email,
-        tenant: user.tenant?.name,
-        tenantId: user.tenant?.tenantId,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        phone: user.phone,
-        timezone: user.timezone,
-        isActive: user.isActive,
-        createdAt: user.createdAt,
-      }));
+      const formattedRows = result.data.map((user) => {
+        // Backend may return the role nested (user.role) or as a list
+        // (user.roles[0].role) depending on how the DTO is shaped —
+        // handle both so this doesn't break either way.
+        const role =
+          user.role || (Array.isArray(user.roles) ? user.roles[0]?.role : null);
+
+        return {
+          id: user.userId,
+          userId: user.userId,
+          username: user.username,
+          email: user.email,
+          tenant: user.tenantName,
+          tenantId: user.tenant?.tenantId,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          phone: user.phone,
+          timezone: user.timezone,
+          roleId: user.roleId ?? role?.roleId ?? null,
+          roleName: user.roleName ?? role?.roleName ?? "—",
+          isActive: user.isActive,
+          createdAt: user.createdAt,
+        };
+      });
       setUsers(formattedRows);
     }
     setLoading(false);
+  };
+  const loadRoles = async () => {
+    const result = await getRoleDropdown();
+    if (result.success) {
+      setRoleOptions(result.data);
+    }
   };
   const handleCreate = () => {
     setMode("create");
@@ -86,6 +106,7 @@ function User() {
       lastName: row.lastName || "",
       phone: row.phone || "",
       timezone: row.timezone || "Asia/Kolkata",
+      roleId: row.roleId ?? "",
       isActive: row.isActive,
     });
     setOpenForm(true);
@@ -103,7 +124,8 @@ function User() {
       !form.firstName ||
       !form.lastName ||
       !form.phone ||
-      !form.timezone
+      !form.timezone ||
+      !form.roleId
     ) {
       alert("Please fill all required fields");
       return;
@@ -130,6 +152,7 @@ function User() {
       const payload = {
         ...form,
         tenantId: tenant?.tenantId ?? null,
+        roleId: Number(form.roleId),
         isActive: form.isActive,
       };
 
@@ -161,6 +184,7 @@ function User() {
     { field: "firstName", headerName: "First Name", width: 120 },
     { field: "lastName", headerName: "Last Name", width: 120 },
     { field: "tenant", headerName: "Tenant", width: 150 },
+    { field: "roleName", headerName: "Role", width: 150 },
     {
       field: "isActive",
       headerName: "Status",
@@ -241,7 +265,12 @@ function User() {
         loading={saving}
       >
         {" "}
-        <UserForm form={form} setForm={setForm} mode={mode} />{" "}
+        <UserForm
+          form={form}
+          setForm={setForm}
+          mode={mode}
+          roleOptions={roleOptions}
+        />{" "}
       </CommonDialog>{" "}
       <Backdrop className="save-backdrop" open={saving}>
         <CircularProgress color="inherit" />

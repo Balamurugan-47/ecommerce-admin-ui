@@ -1,7 +1,7 @@
-import { TextField, Grid, FormControlLabel, Switch } from "@mui/material";
+import { TextField, Grid, FormControlLabel, Switch, MenuItem } from "@mui/material";
 import "../common.css";
 
-function UserForm({ form, setForm, mode}) {
+function UserForm({ form, setForm, mode, roleOptions = [] }) {
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -82,6 +82,25 @@ function UserForm({ form, setForm, mode}) {
           value={form.timezone || "Asia/Kolkata"}
           onChange={handleChange}
         />
+      </Grid>
+
+      <Grid item xs={12} md={6}>
+        <TextField
+          select
+          fullWidth
+          size="small"
+          label="Role"
+          name="roleId"
+          required
+          value={form.roleId ?? ""}
+          onChange={handleChange}
+        >
+          {roleOptions.map((role) => (
+            <MenuItem key={role.roleId} value={role.roleId}>
+              {role.roleName}
+            </MenuItem>
+          ))}
+        </TextField>
       </Grid>
 
       {mode === "create" && (

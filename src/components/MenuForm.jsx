@@ -1,17 +1,35 @@
 import { TextField, Grid, FormControlLabel, Switch, MenuItem } from "@mui/material";
 import "../common.css";
 
-const MENU_TYPES = ["MODULE", "MENU", "ACTION"];
+const MENU_TYPES = ["MODULE", "SUBMODULE"];
 
 function MenuForm({ form, setForm, parentMenuOptions = [] }) {
+  const isSubmodule = form.menuType === "SUBMODULE";
+
+  // Only MODULE-type menus can be a parent
+  const moduleOptions = parentMenuOptions.filter((m) => m.menuType === "MODULE");
+
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === "menuType") {
+      // If switching to MODULE, parent menu is not applicable — clear it
+      setForm((prev) => ({
+        ...prev,
+        menuType: value,
+        parentMenuId: value === "SUBMODULE" ? prev.parentMenuId : null,
+      }));
+      return;
+    }
+
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSwitch = (e) => {
     setForm((prev) => ({ ...prev, isActive: e.target.checked }));
   };
+
+  const parentMenuMissing = isSubmodule && !form.parentMenuId;
 
   return (
     <Grid container spacing={2} className="form-grid-mt-half">
@@ -55,24 +73,34 @@ function MenuForm({ form, setForm, parentMenuOptions = [] }) {
         </TextField>
       </Grid>
 
-      <Grid item xs={12} sm={6}>
-        <TextField
-          select
-          label="Parent Menu"
-          name="parentMenuId"
-          value={form.parentMenuId ?? ""}
-          onChange={handleChange}
-          fullWidth
-          size="small"
-        >
-          <MenuItem value="">None</MenuItem>
-          {parentMenuOptions.map((m) => (
-            <MenuItem key={m.menuId} value={m.menuId}>
-              {m.menuName}
-            </MenuItem>
-          ))}
-        </TextField>
-      </Grid>
+      {/* Parent Menu only applies to SUBMODULE type */}
+      {isSubmodule && (
+        <Grid item xs={12} sm={6}>
+          <TextField
+            select
+            label="Parent Menu *"
+            name="parentMenuId"
+            value={form.parentMenuId ?? ""}
+            onChange={handleChange}
+            fullWidth
+            size="small"
+            error={parentMenuMissing}
+            helperText={parentMenuMissing ? "Parent menu is required for a submodule" : ""}
+          >
+            {moduleOptions.length === 0 ? (
+              <MenuItem value="" disabled>
+                No modules available
+              </MenuItem>
+            ) : (
+              moduleOptions.map((m) => (
+                <MenuItem key={m.menuId} value={m.menuId}>
+                  {m.menuName}
+                </MenuItem>
+              ))
+            )}
+          </TextField>
+        </Grid>
+      )}
 
       <Grid item xs={12} sm={6}>
         <TextField
@@ -82,18 +110,6 @@ function MenuForm({ form, setForm, parentMenuOptions = [] }) {
           onChange={handleChange}
           fullWidth
           size="small"
-        />
-      </Grid>
-
-      <Grid item xs={12} sm={6}>
-        <TextField
-          label="Icon"
-          name="icon"
-          value={form.icon}
-          onChange={handleChange}
-          fullWidth
-          size="small"
-          placeholder="e.g. DashboardIcon"
         />
       </Grid>
 

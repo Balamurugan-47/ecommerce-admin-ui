@@ -165,6 +165,12 @@ function Menu() {
       return;
     }
 
+    // SUBMODULE must have a parent; MODULE must not.
+    if (form.menuType === "SUBMODULE" && !form.parentMenuId) {
+      alert("Parent Menu is required for a Submodule.");
+      return;
+    }
+
     try {
       setSaving(true);
 
@@ -173,7 +179,10 @@ function Menu() {
         menuName: form.menuName,
         menuCode: form.menuCode,
         menuType: form.menuType,
-        parentMenuId: form.parentMenuId ? Number(form.parentMenuId) : null,
+        parentMenuId:
+          form.menuType === "SUBMODULE" && form.parentMenuId
+            ? Number(form.parentMenuId)
+            : null,
         url: form.url || null,
         icon: form.icon || null,
         displayOrder: Number(form.displayOrder),
@@ -240,8 +249,8 @@ function Menu() {
         <MenuForm
           form={form}
           setForm={setForm}
-          parentMenuOptions={menus.filter(
-            (m) => mode === "edit" ? m.menuId !== selectedMenu?.menuId : true
+          parentMenuOptions={menus.filter((m) =>
+            mode === "edit" ? m.menuId !== selectedMenu?.menuId : true
           )}
         />
       </CommonDialog>

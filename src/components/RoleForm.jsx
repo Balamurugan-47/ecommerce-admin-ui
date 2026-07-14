@@ -11,6 +11,7 @@ import {
   Typography,
   Divider,
   Box,
+  Chip,
 } from "@mui/material";
 import GroupIcon from "@mui/icons-material/Group";
 import "../common.css";
@@ -20,8 +21,18 @@ import "../common.css";
 //   roleName: string,
 //   description: string,
 //   isActive: boolean,
-//   menus: [{ menuId, menuName, level, canView, canCreate, canEdit, canDelete, canExport }]
+//   menus: [{ menuId, menuName, level, menuType, canView, canCreate, canEdit, canDelete, canExport }]
 // }
+
+const TypeChip = ({ level }) => (
+  <Chip
+    label={level === 0 ? "Module" : "Submodule"}
+    size="small"
+    className={`permission-type-chip ${
+      level === 0 ? "permission-type-chip--module" : "permission-type-chip--submodule"
+    }`}
+  />
+);
 
 function RoleForm({ form, setForm }) {
   const handleChange = (e) => {
@@ -108,11 +119,14 @@ function RoleForm({ form, setForm }) {
 
       <Grid item xs={12}>
         <Box className="permissions-table-container">
-          <Table size="small">
+          <Table size="small" className="permissions-table">
             <TableHead>
               <TableRow>
                 <TableCell padding="checkbox" />
                 <TableCell>Screen Name</TableCell>
+                <TableCell align="center" width={110}>
+                  Type
+                </TableCell>
                 <TableCell align="center">View</TableCell>
                 <TableCell align="center">Create</TableCell>
                 <TableCell align="center">Edit</TableCell>
@@ -128,9 +142,13 @@ function RoleForm({ form, setForm }) {
                   m.canEdit &&
                   m.canDelete &&
                   m.canExport;
+                const isModule = m.level === 0;
 
                 return (
-                  <TableRow key={m.menuId}>
+                  <TableRow
+                    key={m.menuId}
+                    className={isModule ? "permissions-row--module" : "permissions-row--submodule"}
+                  >
                     <TableCell padding="checkbox">
                       <Checkbox
                         size="small"
@@ -140,8 +158,16 @@ function RoleForm({ form, setForm }) {
                         }
                       />
                     </TableCell>
-                    <TableCell style={{ paddingLeft: 16 + m.level * 24 }}>
-                      {m.menuName}
+                    <TableCell>
+                      <Typography
+                        variant="body2"
+                        fontWeight={isModule ? 600 : 400}
+                      >
+                        {m.menuName}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <TypeChip level={m.level} />
                     </TableCell>
                     <TableCell align="center">
                       <Checkbox

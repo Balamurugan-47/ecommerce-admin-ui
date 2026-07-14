@@ -74,7 +74,7 @@
 .form-grid-mt-half {
   margin-top: 4px; /* MUI spacing(0.5) */
 }
- 
+
 .form-grid-mt {
   margin-top: 8px; /* MUI spacing(1) */
 }
@@ -84,33 +84,69 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  width: 100%;
   margin-top: 16px;
   margin-bottom: 8px;
 }
- 
+
 .permissions-header-icon {
   color: #5b4fcf;
 }
- 
+
 .permissions-divider {
-  margin-bottom: 12px;
+  margin-bottom: 12px !important;
+  border-color: rgba(91, 79, 207, 0.15) !important;
 }
- 
+
 .permissions-table-container {
   background: #f5f6fb;
   border-radius: 8px;
   padding: 8px;
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid rgba(91, 79, 207, 0.12);
 }
- 
+
 .permissions-table-container thead tr {
   background: #eceefa;
 }
- 
+
 .permissions-table-container th {
   font-weight: 600 !important;
+  white-space: nowrap;
 }
- 
+
 .permissions-screen-name {
   display: flex;
   align-items: center;
+}
+
+/* Module vs Submodule rows — distinguished by shading, not indentation */
+.permissions-row--module {
+  background: #eceefa;
+}
+
+.permissions-row--module td {
+  border-top: 1px solid rgba(91, 79, 207, 0.15);
+}
+
+.permissions-row--submodule td {
+  border-bottom: 1px solid rgba(91, 79, 207, 0.06);
+}
+
+/* Type chip (Module / Submodule) shown in its own column */
+.permission-type-chip {
+  font-size: 11px !important;
+  height: 22px !important;
+  font-weight: 600 !important;
+}
+
+.permission-type-chip--module {
+  background: #5b4fcf !important;
+  color: #fff !important;
+}
+
+.permission-type-chip--submodule {
+  background: #dfe1f0 !important;
+  color: #4a4a63 !important;
 }
